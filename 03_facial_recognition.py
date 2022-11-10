@@ -1,8 +1,6 @@
 #! /usr/bin/python
 
 # import the necessary packages
-from imutils.video import VideoStream
-from imutils.video import FPS
 import face_recognition
 import imutils
 import pickle
@@ -19,24 +17,21 @@ encodingsP = "encodings.pickle"
 print("[INFO] loading encodings + face detector...")
 data = pickle.loads(open(encodingsP, "rb").read())
 
-# initialize the video stream and allow the camera sensor to warm up
-# Set the ser to the followng
-# src = 0 : for the build in single web cam, could be your laptop webcam
-# src = 2 : I had to set it to 2 inorder to use the USB webcam attached to my laptop
-vs = VideoStream(src=0).start()
-#vs = VideoStream(usePiCamera=True).start()
-time.sleep(2.0)
+cam = cv2.VideoCapture(0)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+cam.set(cv2.CAP_PROP_FPS, 30)
 
-# start the FPS counter
-fps = FPS().start()
-
-# loop over frames from the video file stream
+# loop over frames from the video stream
 while True:
-    # grab the frame from the threaded video stream and resize it
-    # to 500px (to speedup processing)
-    frame = vs.read()
-    frame = imutils.resize(frame, width=500)
-    # Detect the fce boxes
+    # grab the frame from the threaded video stream
+    ret, frame = cam.read()
+    if not ret:
+        print("\n[ERROR] Unable to receive frames. Exiting...")
+        break
+    # resize the frame to 320px (to speedup processing)
+    frame = imutils.resize(frame, width=320)
+    # detect the face boxes
     boxes = face_recognition.face_locations(frame)
     # compute the facial embeddings for each face bounding box
     encodings = face_recognition.face_encodings(frame, boxes)
@@ -44,8 +39,7 @@ while True:
 
     # loop over the facial embeddings
     for encoding in encodings:
-        # attempt to match each face in the input image to our known
-        # encodings
+        # attempt to match each face in the input image to our known encodings
         matches = face_recognition.compare_faces(data["encodings"], encoding)
         name = "Unknown" #if face is not recognized, then print Unknown
 
@@ -91,14 +85,6 @@ while True:
     if key == ord("q"):
         break
 
-    # update the FPS counter
-    fps.update()
-
-# stop the timer and display FPS information
-fps.stop()
-print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
-
-# do a bit of cleanup
+# cleanup
+cam.release()
 cv2.destroyAllWindows()
-vs.stop()
