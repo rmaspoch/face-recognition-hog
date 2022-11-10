@@ -25,17 +25,14 @@ sudo apt-get install build-essential \
 sudo apt-get clean
 
 sudo apt-get install libopenblas-dev
-
 ```
 
-Install **dlib**:
-
+Install the dlib Python library:
 ```
 sudo pip3 install dlib
 ```
 
-Install the python face recognition library (https://github.com/ageitgey/face_recognition)
-
+Install the Python face recognition library (https://github.com/ageitgey/face_recognition):
 ```
 sudo pip3 install --no-cache-dir face_recognition
 ```
@@ -49,7 +46,7 @@ Create a "datasets" folder before running any of the Python files.
 
 ## Capturing user images
 Open the 01_headshots.py file and change the variable "name" to the name of the user. Create a folder under "datasets" with the same name.
-Run the 01_headshots.py file and click the Space key to take a photo. Take about 10 photos of each user.
+Run the 01_headshots.py file and press space to take a photo. Take about 10 photos of each user.
 
 ## Training the face recognition model
 Run the 02_train_model.py file. 
