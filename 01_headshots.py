@@ -3,9 +3,12 @@ import cv2
 name = 'Lani' #replace with your name
 
 cam = cv2.VideoCapture(0)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+cam.set(cv2.CAP_PROP_FPS, 30)
 
-cv2.namedWindow("press space to take a photo", cv2.WINDOW_NORMAL)
-cv2.resizeWindow("press space to take a photo", 500, 300)
+#cv2.namedWindow("press space to take a photo", cv2.WINDOW_NORMAL)
+#cv2.resizeWindow("press space to take a photo", 500, 300)
 
 img_counter = 0
 
